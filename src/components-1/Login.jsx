@@ -11,7 +11,10 @@ const initialForm = {
 };
 
 export default function Login() {
-  const [form, setForm] = useState(initialForm);
+  const [form, setForm] = useState({
+    ...initialForm,
+    ['email']: localStorage.getItem('email') || '',
+  });
 
   const history = useHistory();
 
@@ -34,6 +37,7 @@ export default function Login() {
         );
         if (user) {
           setForm(initialForm);
+          localStorage.setItem('email', user.email);
           history.push('/main');
           toast.success(`Merhaba ${user.name}, tekrar hoş geldin.`);
         } else {
@@ -54,6 +58,7 @@ export default function Login() {
           type="email"
           onChange={handleChange}
           value={form.email}
+          autoFocus={localStorage.getItem('email') ? false : true}
           data-testid="email-input"
         />
       </FormGroup>
@@ -66,6 +71,7 @@ export default function Login() {
           type="password"
           onChange={handleChange}
           value={form.password}
+          autoFocus={localStorage.getItem('email') ? true : false}
           data-testid="password-input"
         />
       </FormGroup>
